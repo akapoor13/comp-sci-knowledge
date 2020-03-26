@@ -1,66 +1,114 @@
-#include <stdio.h>
+#include <iostream>
 using namespace std;
+
+
 
 class BST
 {
+    
     class Node
     {
-        int data;
-        Node *left;
-        Node *right;
+        public:
+            int data;
+            Node *left;
+            Node* right;
 
-        Node(int data) : data{data} {};
+            Node(int data) : data{data}, left{nullptr}, right{nullptr} {};
+            
     };
-
     Node *root = nullptr;
+    
 
-public:
-    Node *insertNodeR(Node *root, int value)
-    {
-        if (root == nullptr)
+    public:
+        void insert(int v)
         {
-            return Node(value);
+            root=insertNodeR(root,v);
         }
-        else if ((root->data) > value)
+        
+        Node *insertNodeR(Node *root, int value)
         {
-            root->left = insertNodeR(root->left, value);
+            if (root == nullptr)
+            {
+                return new Node(value);
+            }
+            else if ((root->data) > value)
+            {
+                root->left = insertNodeR(root->left, value);
+            }
+            else
+            {
+                root->right = insertNodeR(root->right, value);
+            }
+    
+            return root;
         }
-        else
+    
+        Node *copyBSTr( Node *root2)
         {
-            root->right = insertNodeR(root->right, value);
+            if (root2 == nullptr)
+            {
+                return nullptr;
+            }
+            else
+            {
+                Node *r =new Node(root2->data);
+                r->left =copyBSTr(root2->left);
+                r->right =copyBSTr(root2->right);
+                return r;
+            }
         }
-
-        return root;
-    }
-
-    void insertNode(Node *root, int value)
-    {
-        root = insertNoder(root, value);
-    }
-
-    Node *copyBSTr(Node *copyIntoRoot, Node *root2)
-    {
-        if (root2 == nullptr)
+    
+        void copy(BST t2)
         {
-            return copyIntoRoot;
+            root = copyBSTr(t2.root);
         }
-        else
-        {
-            insertNode(copyIntoRoot, root2->data);
-            copyBST(copyIntoRoot, root2->left);
-            copyBST(copyIntoRoot, root->right);
+        
+        void inorderR(Node* root) {
+            if (root==nullptr) {
+                return;
+            } else {
+                inorderR(root->left);
+                cout << root->data<<"\t";
+                inorderR(root->right);
+            }
         }
-
-        return copyIntoRoot
-    }
-
-    void copyBST(Node *root2)
-    {
-        root = copyBSTr(root, root2);
-    }
+        
+        void inorder() {
+            inorderR(root);
+        }
+        
+        void mirrorR(Node* root) {
+            if (root==nullptr) {
+                return;
+            } else {
+                Node *temp = root->left;
+                root->left = root->right;
+                root->right = temp;
+                
+                mirrorR(root->left);
+                mirrorR(root->right);
+            }
+        }
+        
+        void mirror() {
+            mirrorR(root);
+        }
 };
+
+
 
 int main()
 {
-    return 1;
+   
+   BST x,y;
+   x.insert(50);
+   x.insert(70);
+   x.insert(90);
+   x.insert(150);
+   x.insert(175);
+   x.insert(25);
+   y.copy(x);
+   y.inorder();
+   x.mirror();
+   x.inorder();
 }
