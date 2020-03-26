@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include <vector.h>
+#include <vector>
 using namespace std;
 
 class Heap
@@ -9,7 +9,7 @@ class Heap
 
     int parent(int index)
     {
-        return (index - 1) / 2
+        return (index - 1) / 2;
     }
 
     int left(int parent)
@@ -27,16 +27,14 @@ class Heap
         return heap.at(0);
     }
 
-    void heapifyUp(int i)
+    void heapifyUp(int val)
     {
         int par = parent(i);
+        int i = capacity;
 
-        while (0 < par && heap[par] < heap[i])
+        while (0 < par && heap[par] < val)
         {
-            int temp = heap[par];
-            heap[par] = heap[i];
-            heap[i] = temp;
-
+            heap[i] = heap[par];
             i = par;
             par = parent(i);
         }
@@ -44,43 +42,41 @@ class Heap
 
     void heapifyDown(int i)
     {
-        int left = left(i);
-        int right = right(i);
+        int l = left(i);
+        int r = right(i);
         
-        while (left<capacity || right<capacity) {
-            if left>capacity left=capacity;
-            if right>capacity right=capacity;
+        while (l<capacity || r<capacity) {
+            int largest;
 
-            if (heap[i]<heap[left]) {
-                temp = heap[left];
-                heap[left] = heap[i];
-                heap[i] = temp;
-
-                i = left;
-            } else if (heap[i] < heap[right]) {
-                temp = heap[right];
-                heap[right] = heap[i];
-                heap[i] = temp;
-            } else {
-                return;
+            if (l<capacity && heap[l]>heap[i]) {
+                largest = l;
             }
 
-            left = left(i);
-            right = right(i);
+            if (r<capacity && heap[r]>heap[largest]) {
+                largest = r;
+            }
+
+            if (largest!=i) {
+                swap(heap[largest], heap[i]);
+                i = largest;
+            }
+
         }
     }
 
     void insert(int val)
     {
         heap.push_back(val);
-        heapifyUp(capacity);
+        heapifyUp(val);
         capacity += 1;
     }
 
-    void delete (int index)
+    void del()
     {
-        heap.erase(heap.begin());
-        capcity -= 1;
+        heap[0] = heap[capacity];
+        heap.erase(heap.end());
+        capacity -= 1;
+        
         heapifDown(0);
     }
 };
