@@ -74,6 +74,38 @@ def cycles(startNode, endNode, mst):
     return len(startS.intersection(endS)) != 0
 
 
+def dijkstra(G, root):
+    parent = [-1] * len(G)
+    cost = [float('inf')] * len(G)
+    visited = [False] * len(G)
+
+    counter = 1
+    src = root
+    cost[root] = 0
+    visited[root] = True
+
+    while (counter != len(G)):
+        for currNode in range(len(G[src])):
+            if cost[currNode] > cost[src] + G[src][currNode] and not visited[currNode]:
+                cost[currNode] = cost[src] + G[src][currNode]
+                parent[currNode] = src
+
+        minCost = float('inf')
+        minNode = 0
+        for i in range(len(cost)):
+            if not visited[i] and cost[i] < minCost:
+                minNode = i
+                minCost = cost[i]
+
+        src = minNode
+        visited[src] = True
+        counter += 1
+
+    print(parent)
+    print(cost)
+    print(visited)
+
+
 G2 = [
     [float('inf'), 1, float('inf'), 1, float('inf')],
     [1, float('inf'), 1, float('inf'), 1],
